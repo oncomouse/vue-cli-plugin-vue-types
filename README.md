@@ -1,4 +1,9 @@
-Fix:
+# vue-cli-plugin-vue-types
 
-1. Line in processJS that may not work if there are trailing commas in the extend props array.
-2. Rewrite in Ramda.
+Add [vue-types](https://github.com/dwightjack/vue-types) to projects created with [@vue/cli](https://cli.vuejs.org/)
+
+## Install:
+
+~~~bash
+vue add @oncomouse/vue-types
+~~~
