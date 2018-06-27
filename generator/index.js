@@ -6,9 +6,15 @@ const attachExtends = obj => Object.assign({}, obj, {
 
 const processYaml = str => yaml.safeDump(attachExtends(yaml.safeLoad(str)));
 const processJS = (str) => {
-  const ex = str.match(new RegExp(/['"]{0,1}extends['"]{0,1}:\s{0,1}\[.*\]/, 'smi'))[0];
+  // Extract the extends prop from the config object:
+  const exMatch = str.match(new RegExp(/['"]{0,1}extends['"]{0,1}:\s{0,1}\[.*\]/, 'smi'));
+  if (exMatch === null) { return str; }
+  const ex = exMatch[0];
+  // Keep spacing correct in the file:
   const spacing = ex.match(/,\s+/)[0].replace(',', '');
-  const insertPoint = ex.lastIndexOf('\'') + 1;
+  // The point at which we will add the new extension (after the final element in the array):
+  const insertPoint = ex.lastIndexOf('\'') + 1; // This may not work if there are trailing commas in .eslintrc.js
+  // Generate the patched extend prop:
   const outputExtend = `${ex.slice(0, insertPoint)},${spacing}'plugin:vue-types/strongly-recommended'${ex.slice(insertPoint)}`;
   return str.replace(ex, outputExtend);
 };
