@@ -27,6 +27,13 @@ describe('handlFileConfigs', () => {
     handleFileConfigs(tree);
     expect(tree['.eslintrc.js']).to.equal(eslintrcJsSrc.correct);
   });
+  it('should ignore a non-root JS file', () => {
+    const tree = {
+      'test/.eslintrc.js': eslintrcJsSrc.base,
+    };
+    handleFileConfigs(tree);
+    expect(tree['test/.eslintrc.js']).to.equal(eslintrcJsSrc.base);
+  });
   it('should process a JS file w/ a trailing comma', () => {
     const tree = {
       '.eslintrc.js': eslintrcJsSrc.baseTrailing,
