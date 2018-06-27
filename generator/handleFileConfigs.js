@@ -98,14 +98,14 @@ const handleFileConfig = (file, src) => compose(
     // Test if the file is a .yml or .yaml file:
     [test(/\.ya{0,1}ml/), () => processYaml(src, spaces(src))],
     // Otherwise, this lowkey nightmare of a tryCatch block:
-    // The way this works is if there is no file extension, we have to guess the syntax. We guess
-    // the syntax by try-ing JSON.parse and yaml.safeLoad, which both throw errors if they find
-    // syntax errors. If those both throw, we assume JS syntax and run that.
-    [T, () => tryCatch(
-      () => processJSON(src, spaces(src)), // Try JSON
-      tryCatch( // If JSON throws an error, another try/catch block
-        () => processYaml(src, spaces(src)), // Try YAML
-        () => processJS(src, spaces(src)), // If YAML throws an error, assume JavaScript
+    // If there is no file extension, we have to guess the syntax, which we accomplish by first
+    // try-ing JSON.parse then try-ing yaml.safeLoad, which both throw errors if there are syntax
+    // issues. If both error, we assume JavaScript.
+    [T, tryCatch(
+      () => processJSON(src, spaces(src)), // Try JSON.parse
+      tryCatch( // Catch JSON error, call another tryCatch block
+        () => processYaml(src, spaces(src)), // Try yaml.safeLoad
+        () => processJS(src, spaces(src)), // Catch YAML error, assume JavaScript
       ),
     )()],
   ]),
