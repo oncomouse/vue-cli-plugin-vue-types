@@ -1,0 +1,29 @@
+{
+  "base": {
+  	"extends": [
+  		"airbnb-base"
+  	],
+  	"env": {
+  		"node": true,
+      "mocha": true
+  	},
+  	"parser": "babel-eslint",
+  	"parserOptions": {
+  		"allowImportExportEverywhere": false
+  	}
+  },
+  "correct": {
+    "extends": [
+  		"airbnb-base",
+      "plugin:vue-types/strongly-recommended"
+  	],
+  	"env": {
+  		"node": true,
+      "mocha": true
+  	},
+  	"parser": "babel-eslint",
+  	"parserOptions": {
+  		"allowImportExportEverywhere": false
+  	}
+  }
+}
