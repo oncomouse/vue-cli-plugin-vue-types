@@ -1,14 +1,8 @@
 const yaml = require('js-yaml');
 
-const attachExtends = obj => Object.assign(obj, {
+const attachExtends = obj => Object.assign({}, obj, {
   extends: obj.extends.concat(['plugin:vue-types/strongly-recommended']),
-}); /* ({
-  ...obj,
-  extends: [
-    ...obj.extends,
-    'plugin:vue-types/strongly-recommended',
-  ],
-}); */
+});
 
 const processYaml = str => yaml.safeDump(attachExtends(yaml.safeLoad(str)));
 const processJS = (str) => {
