@@ -116,7 +116,7 @@ const handleFileConfigs = tree => compose(
     tree[obj.file] = obj.src; // eslint-disable-line no-param-reassign
     return obj;
   }),
-  filter(propIs(Object)),
+  filter(propIs(Object, 'src')),
   map(file => handleFileConfig(file, tree[file])),
   filter(test(/eslintrc/)),
   keys,
