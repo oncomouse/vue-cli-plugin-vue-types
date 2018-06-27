@@ -84,7 +84,7 @@ const processJSFindSpacingAndInsertPoint = juxt([
       slice(-1, Infinity),
       match(/['"],{0,1}/g),
     ),
-    compose(add(__, 1), findLastIndex(test(/['"]/))),
+    compose(add(1), findLastIndex(test(/['"]/))),
     findLastIndex(equals(',')),
   ),
 ]);
@@ -94,12 +94,12 @@ const processJSFindSpacingAndInsertPoint = juxt([
  * @param {string} str The original JavaScript source.
  * @param {string} ex The extracted source code of extends key/value combo.
  * @param {string} spacing The whitespace after the comma in each entry in the extends prop.
- * @param {Number} insertPoint The position in str where we will insert the desired plugin.
+ * @param {number} insertPoint The position in str where we will insert the desired plugin.
  * @returns {string} Updated version of {@link str}.
  */
 const processJSReplace = (str, ex, spacing, insertPoint) => replace(
   ex,
-  `${ex.slice(0, insertPoint)},${spacing}'plugin:vue-types/strongly-recommended'${ex.slice(insertPoint)}`,
+  `${slice(0, insertPoint, ex)},${spacing}'plugin:vue-types/strongly-recommended'${slice(insertPoint, Infinity, ex)}`,
 )(str);
 /**
  * While cond() can sometimes be confusing, this version means we only have to call
@@ -135,7 +135,7 @@ const processJS = str => compose(
  * @function
  * @name spaces
  * @param {string} str Multiline string to scan.
- * @return {Integer|Boolean} Either the number of spaces per indent OR false if tabs are used.
+ * @return {number|boolean} Either the number of spaces per indent OR false if tabs are used.
  */
 const spaces = compose(
   ifElse(
