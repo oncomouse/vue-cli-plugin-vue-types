@@ -1,10 +1,10 @@
 const {
-  assocPath,
   compose,
-  has,
-  ifElse,
-  prop,
+  filter,
+  keys,
+  test,
 } = require('ramda');
+const fs = require('fs');
 const { handleFileConfigs } = require('./handleFileConfigs');
 
 module.exports = (api) => {
@@ -12,12 +12,32 @@ module.exports = (api) => {
     dependencies: {
       'vue-types': '^1.3.1',
     },
-    devDependencies: {
-      'eslint-plugin-vue-types': '^0.1.0',
-    },
   });
+  if (api.hasPlugin('eslint')) {
+    api.extendPackage({
+      devDependencies: {
+        'eslint-plugin-vue-types': '^0.1.0',
+      },
+    });
+    api.render((tree) => {
+      const files = compose(
+        filter(fs.existsSync),
+        filter(test(/^[^/]*eslintrc/)),
+        keys,
+      )(tree);
+      if (files.length === 0) {
+        api.extendPackage({
+          eslintConfig: {
+            extends: ['plugin:vue-types/strongly-recommended'],
+          },
+        });
+      } else {
+        handleFileConfigs(tree);
+      }
+    });
+  }
   // Update ESLint Config
-  api.render(tree => compose(
+  /* api.render(tree => compose(
     ifElse(
       has('eslintConfig'),
       // If we are dealing w/ package.json, build the extension object and pass it to
@@ -31,5 +51,5 @@ module.exports = (api) => {
     ),
     JSON.parse, // Parse its JSON
     prop('package.json'), // Get package.json from tree
-  )(tree));
+  )(tree)); */
 };
