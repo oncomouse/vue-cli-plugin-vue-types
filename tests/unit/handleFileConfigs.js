@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const eslintrcJsSrc = require('../fixtures/mockEslintrc');
 const eslintrcJsonSrc = require('../fixtures/mockEslintrc.json');
 const eslintrcYamlSrc = require('../fixtures/mockEslintrc.yaml');
-const { handleFileConfigs, attachExtends } = require('../../generator/handleFileConfigs');
+const { handleFileConfigs, attachExtends } = require('../../generator/utils/handleFileConfigs');
 
 describe('attachExtends', () => {
   it('should attach "plugin:vue-types/strongly-recommended" to an array at object.extends', () => {
