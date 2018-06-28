@@ -1,13 +1,11 @@
 const yaml = require('js-yaml');
 const {
   __,
-  T,
   add,
   always,
   apply,
   compose,
   concat,
-  cond,
   equals,
   evolve,
   findLastIndex,
@@ -114,21 +112,19 @@ const processJSReplace = (str, ex, spacing, insertPoint) => replace(
  * returns {@link str}.
  */
 const processJS = str => compose(
-  cond([
-    [
-      compose(
-        gte(__, 1),
-        length,
-      ),
-      compose(
-        apply(processJSReplace),
-        concat([str]),
-        processJSFindSpacingAndInsertPoint,
-        nth(0),
-      ),
-    ],
-    [T, always(str)],
-  ]),
+  ifElse(
+    compose(
+      gte(__, 1),
+      length,
+    ),
+    compose(
+      apply(processJSReplace),
+      concat([str]),
+      processJSFindSpacingAndInsertPoint,
+      nth(0),
+    ),
+    always(str),
+  ),
   match(new RegExp(/['"]{0,1}extends['"]{0,1}:\s{0,1}\[.*\]/, 'smi')),
 )(str);
 /**
